@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Diagram";
+    var canvasjsType = ViewBag.chartType;
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js">
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var bagData = JSON.parse('@Html.Raw(ViewBag.DataPointsJson)');
+            // Create array of data points
+            var chartDataPoints = [];
+            for (var i = 0; i < bagData.length; i++) {
+                switch ("@canvasjsType") {
+                    case "column":
+                        chartDataPoints.push({
+                            label: bagData[i].label,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "bar":
+                        chartDataPoints.push({
+                            label: bagData[i].label,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "pie":
+                        chartDataPoints.push({
+                            label: bagData[i].label,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "line":
+                        chartDataPoints.push({
+                            x: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                    case "bubble":
+                        chartDataPoints.push({
+                            x: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "spline":
+                        chartDataPoints.push({
+                            label: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "splineArea":
+                        chartDataPoints.push({
+                            label: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "stepLine":
+                        chartDataPoints.push({
+                            x: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                        break;
+                    case "stepArea":
+                        chartDataPoints.push({
+                            label: bagData[i].x,
+                            y: bagData[i].y
+                        });
+                        break;                   
+                }
+            }
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                backgroundColor: "#8AB6D6",
+                theme: "theme2",
+                animationEnabled: true,
+                title: {
+                    text: "A Chart With "
+                },
+                subtitles: [
+                    { text: "Resize the Browser" }
+                ],
+                data: [
+                    {
+                        // change type to bar, line, area, pie, etc.
+                        type: "@canvasjsType",//"line",
+                        dataPoints: chartDataPoints
+                        }
+                ]
+            });
+            chart.render();
+        };
+    </script>
+</head>
+<body>
+    <div id="chartContainer">
+    </div>
+
+</body>
+</html>

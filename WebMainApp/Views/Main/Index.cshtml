@@ -1,0 +1,186 @@
+﻿@model IEnumerable<WebAppDBHandler.DatabaseContext.COUNTRy>
+
+
+@{
+    ViewBag.Title = "Επιλογή χώρας";
+}
+
+
+<head>
+    <link href="@Url.Content("~/CSSFiles/MyStyles.css")" rel="stylesheet" type="text/css" />    
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var ChooseYearDropdown = document.getElementById("ChooseYear");
+        var AgreegateFunctionDropdown = document.getElementById("AgreegateFunction");
+        var ChoosingGroupsDropdown = document.getElementById("ChoosingGroups");
+        var CountriesListDropdown = document.getElementById("CountriesList");
+
+        ChooseYearDropdown.addEventListener("change", function () {
+            if (ChooseYearDropdown.value === "none") {
+                AgreegateFunctionDropdown.value = "none";
+                AgreegateFunctionDropdown.disabled = false;
+            } else {
+                AgreegateFunctionDropdown.disabled = true;
+            }
+        });
+
+        ChoosingGroupsDropdown.addEventListener("change", function () {
+            if (ChoosingGroupsDropdown.value === "none") {
+                CountriesListDropdown.value = "none";
+                CountriesListDropdown.disabled = false;
+            } else {
+                CountriesListDropdown.disabled = true;
+            }
+        });
+    });
+</script>
+
+<body>
+    @using (Html.BeginForm("ChartsView", "Main", FormMethod.Post, new { id = "ChartsViewForm", @class = "form-control" }))
+    {
+
+        <div class="dropdownForm-container">
+            <div class="">
+                <select class="webApp-select mb-4" id="TypeOfChart" name="TypeOfChart" required>
+                    <option value="none" selected>Choose Chart</option>
+                    <option value="column">Column Chart</option>
+                    <option value="bar">Bar Chart</option>
+                    <option value="pie">Pie Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="scatter">Scatter Chart</option>
+                    <option value="bubble">Bubble Chart</option>
+                    <option value="spline">Spline Chart</option>
+                    <option value="splineArea">Spline Area Chart</option>
+                    <option value="stepLine">Step Line Chart</option>
+                    <option value="stepArea">Step Area Chart</option>
+
+
+                </select>
+            </div>
+            <div class="">
+                <select multiple="multiple" class="webApp-select mb-4" id="columnIndexes" name="columnIndexes" required>
+                    <option value="none" selected>Choose Data Type</option>
+                    @if (ViewBag.columnsToChartIndex != null)
+                    {
+                        foreach (var option in ViewBag.columnsToChartIndex)
+                        {
+                            <option value="@option.databaseColumnName" data-content="@option.databaseColumnName">@option.columnName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="">
+                <select multiple="multiple" class="webApp-select mb-4" id="CountriesList" name="CountriesList">
+                    <option value="none" selected>Choose country</option>
+                    @foreach (var country in Model)
+                    {
+                        <option data-content="@country.C_DISPLAY_NAME" value="@country.COUNTRY_ID">
+                            @country.C_DISPLAY_NAME
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="">
+                <select class="webApp-select mb-4" id="AgreegateFunction" name="AgreegateFunction">
+                    <option value="none" selected>Choose Agreegate function</option>
+                    <option value="sum">SUM</option>
+                    <option value="min">MIN</option>
+                    <option value="miax">MAX</option>
+                    <option value="avg">AVG</option>
+                </select>
+            </div>
+            <div class="">
+                <select class="webApp-select mb-4" id="ChooseYear" name="ChooseYear">
+                    <option value="none" selected>Choose Year</option>
+                    @if (ViewBag.yearsList != null)
+                    {
+                        foreach (var option in ViewBag.yearsList)
+                        {
+                            <option value="@option.year" data-content="@option.year">@option.year</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="">
+                <select class="webApp-select mb-4" id="ChoosingGroups" name="ChoosingGroups">
+                    <option value="none" selected>Choose General Types</option>
+                    <optgroup label="Continent">
+                        <option value="CONTINENT.Africa">Africa</option>
+                        <option value="CONTINENT.Antarctica">Antarctica</option>
+                        <option value="CONTINENT.Asia">Asia</option>
+                        <option value="CONTINENT.Europe">Europe</option>
+                        <option value="CONTINENT.North America">North America</option>
+                        <option value="CONTINENT.Oceania">Oceania</option>
+                        <option value="CONTINENT.South America">South America</option>
+                    </optgroup>
+                    <optgroup label="Region Name">
+                        <option value="REGION_NAME.Africa">Africa</option>
+                        <option value="REGION_NAME.Americas">Americas</option>
+                        <option value="REGION_NAME.Asia">Asia</option>
+                        <option value="REGION_NAME.Europe">Europe</option>
+                        <option value="REGION_NAME.Oceania">Oceania</option>
+                    </optgroup>
+                    <optgroup label="Sub Regtion Name">
+                        <option value="SUB_REGION_NAME.Australia and New Zealand">Australia and New Zealand</option>
+                        <option value="SUB_REGION_NAME.Central Asia">Central Asia</option>
+                        <option value="SUB_REGION_NAME.Eastern Asia">Eastern Asia</option>
+                        <option value="SUB_REGION_NAME.Eastern Europe">Eastern Europe</option>
+                        <option value="SUB_REGION_NAME.Latin America and the Caribbean">Latin America and the Caribbean</option>
+                        <option value="SUB_REGION_NAME.Melanesia">Melanesia</option>
+                        <option value="SUB_REGION_NAME.Micronesia">Micronesia</option>
+                        <option value="SUB_REGION_NAME.Northern Africa">Northern Africa</option>
+                        <option value="SUB_REGION_NAME.Northern America">Northern America</option>
+                        <option value="SUB_REGION_NAME.Northern Europe">Northern Europe</option>
+                        <option value="SUB_REGION_NAME.Polynesia">Polynesia</option>
+                        <option value="SUB_REGION_NAME.South-eastern Asia">South-eastern Asia</option>
+                        <option value="SUB_REGION_NAME.Southern Asia">Southern Asia</option>
+                        <option value="SUB_REGION_NAME.Southern Europe">Southern Europe</option>
+                        <option value="SUB_REGION_NAME.Sub-Saharan Africa">Sub-Saharan Africa</option>
+                        <option value="SUB_REGION_NAME.Western Asia">Western Asia</option>
+                        <option value="SUB_REGION_NAME.Western Europe">Western Europe</option>
+                    </optgroup>
+                    <optgroup label="Intermediate Region Name">
+                        <option value="INTERMEDIATE_REGION_NAME.Caribbean">Caribbean</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Central America">Central America</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Channel Islands">Channel Islands</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Eastern Africa">Eastern Africa</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Middle Africa">Middle Africa</option>
+                        <option value="INTERMEDIATE_REGION_NAME.South America">South America</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Southern Africa">Southern Africa</option>
+                        <option value="INTERMEDIATE_REGION_NAME.Western Africa">Western Africa</option>
+                    </optgroup>
+                    <optgroup label="Developed Or Developing">
+                        <option value="DEVELOPED_OR_DEVELOPING.#N/A">#N/A</option>
+                        <option value="DEVELOPED_OR_DEVELOPING.Developed">Developed</option>
+                        <option value="DEVELOPED_OR_DEVELOPING.Developing">Developing</option>
+                    </optgroup>
+                    <optgroup label="Other">
+                        <option value="OTHER_SMALL_ISLAND_DEVELOPING_STATES_SIDS">Small Island Developing Stages</option>
+                        <option value="OTHER_LAND_LOCKED_DEVELOPING_COUNTRIES_LLDC">Land Locked Developing Countries</option>
+                        <option value="OTHER_LEAST_DEVELOPED_COUNTRIES_LDC">Least Developed Countries</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div class="">
+                <input class="webApp-select" type="text" id="YearAggregation" name="YearAggregation" value="None" placeholder="Enter Number Of Years To Group">
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-sm offset-2"> Υποβολή </button>
+        </div>
+
+
+    }
+    <div>
+        @{Html.Partial("ChartsView", "Main");}
+    </div>
+
+</body>
+
+
+
+
+

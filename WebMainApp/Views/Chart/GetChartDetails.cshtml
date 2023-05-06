@@ -1,0 +1,69 @@
+﻿@*@model WebAppDBHandler.DatabaseContext.INDEXES_BY_COUNTRY*@
+
+@{
+    ViewBag.Title = "GetChartDetails";
+}
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Chart View</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js">
+    </script>
+
+    <script type="text/javascript">
+        window.onload = function () {
+            var bagData = JSON.parse('@Html.Raw(ViewBag.DataPointsJson)');
+            // Create array of data points
+            var chartDataPoints = [];
+            for (var i = 0; i < bagData.length; i++) {
+                chartDataPoints.push({
+                    x: bagData[i].x,
+                    y: bagData[i].y
+                });
+            }
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+
+                theme: "theme2",
+                animationEnabled: true,
+                title: {
+                    text: "My Sample Column Chart Created in ASP.NET MVC"
+                },
+                subtitles: [
+                    { text: "Resize the Browser" }
+                ],
+                data: [
+                    {
+                        // change type to bar, line, area, pie, etc.
+                        type: "line",
+                        dataPoints: chartDataPoints
+                            //    [
+                            //    { x: 10, y: 71 },
+                            //    { x: 20, y: 55 },
+                            //    { x: 30, y: 50 },
+                            //    { x: 40, y: 65 },
+                            //    { x: 50, y: 95 },
+                            //    { x: 60, y: 68 },
+                            //    { x: 70, y: 28 },
+                            //    { x: 80, y: 34 },
+                            //    { x: 90, y: 14 }
+                            //]
+                        }
+                ]
+            });
+            chart.render();
+        };
+    </script>
+</head>
+@*<body>
+        <div id="chartContainer">
+        </div>
+
+    </body>*@
+<body>
+    <div>
+        <canvas id="chartContainer"></canvas>
+    </div>
+</body>
+</html>

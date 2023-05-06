@@ -1,0 +1,37 @@
+﻿
+.my-backround {
+    background: #8AB6D6;
+}
+
+.row {
+    display: table-row;
+}
+
+.cell {
+    display: table-cell;
+    border: 1px solid black;
+    padding: 5px;
+}
+
+.webApp-select {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    margin: 0 5px;    
+    font-family: Arial;
+    font-style: oblique;
+    width: 300px;
+}
+
+.dropdownForm-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    height: 500px;
+}
+
+.navbar-blue {
+    background-color: #8AB6D6;
+    color: white;
+}

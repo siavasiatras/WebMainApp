@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33516.290
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebMainApp", "WebMainApp\WebMainApp.csproj", "{C6FB589E-C439-4D8C-9DF5-933E0701AEFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppDBHandler", "WebAppDBHandler\WebAppDBHandler.csproj", "{40D0FCCA-ECFA-48E6-B66D-8A93079DB6CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6FB589E-C439-4D8C-9DF5-933E0701AEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6FB589E-C439-4D8C-9DF5-933E0701AEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6FB589E-C439-4D8C-9DF5-933E0701AEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6FB589E-C439-4D8C-9DF5-933E0701AEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40D0FCCA-ECFA-48E6-B66D-8A93079DB6CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40D0FCCA-ECFA-48E6-B66D-8A93079DB6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40D0FCCA-ECFA-48E6-B66D-8A93079DB6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40D0FCCA-ECFA-48E6-B66D-8A93079DB6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9A2EA0CA-6A8E-4710-B3E8-62DB02DC4882}
+	EndGlobalSection
+EndGlobal

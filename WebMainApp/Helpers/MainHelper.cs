@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
 using WebAppDBHandler.DatabaseContext;
 using WebAppDBHandler.Helpers;
 using WebAppDBHandler.Operations;
@@ -25,7 +22,7 @@ namespace WebMainApp.Helpers
 			}
         }
 
-        public static List<DataPointIntegerX> GetIndexesByCountry(String submittedDataString)
+        public static List<ChartData> GetIndexesByCountry(String submittedDataString)
         {
             try
             {
@@ -38,12 +35,12 @@ namespace WebMainApp.Helpers
             }
         }
 
-        public static List<ColumnsToChartIndex> GetColumns() 
+        public static List<ColumnsToChartIndex> GetColumns()
         {
             try
             {
                 var columnChartList = Functionality.GetColumns();
-                //string columnChartListJson = JsonConvert.SerializeObject(columnChartList);
+                string columnChartListJson = JsonConvert.SerializeObject(columnChartList);
                 return columnChartList;
             }
             catch (Exception ex)
@@ -53,7 +50,7 @@ namespace WebMainApp.Helpers
             }
         }
 
-        public static List<DataPointIntegerX> GetChartDetails(String submittedDataString)
+        public static List<ChartData> GetChartDetails(String submittedDataString)
         {
             try
             {
@@ -67,19 +64,23 @@ namespace WebMainApp.Helpers
             }
         }
 
-        public static List<DataPointStringX> GetChartDetailsString(String submittedDataString)
+        public static string GetChartData(String submittedDataString)
         {
             try
             {
-                var dataList = Functionality.GetChartDetailsString(submittedDataString);
-                return dataList;
+                string stringChartData = "";
+                stringChartData = Functionality.GetChartData(submittedDataString);
+                return  stringChartData;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw ex;
+                throw;
             }
+            
+
         }
+        
 
         public static List<Years> GetYears()
         {

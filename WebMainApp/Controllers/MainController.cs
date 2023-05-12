@@ -20,7 +20,9 @@ namespace WebMainApp.Controllers
                 var countriesList = MainHelper.GetCountries();
                 var columnsToChartIndex = MainHelper.GetColumns();
                 var yearsList = MainHelper.GetYears();
+                //gia to slect me tis stiles
                 ViewBag.columnsToChartIndex = columnsToChartIndex;
+                //gia to select me ta xronia
                 ViewBag.yearsList = yearsList;
                 return View(countriesList);
             }
@@ -36,24 +38,20 @@ namespace WebMainApp.Controllers
         public ActionResult ChartsView(FormCollection form)
         {
             try
-            {
-                //string AgreegateFunction = "";//if we have a disabled dropdown the value of the defualt option dont come here
-                //string CountriesList = "";//if we have a disabled dropdown the value of the defualt option dont come here
-                //if (form.Get("AgreegateFunction") == null) { AgreegateFunction = "none"; } else { AgreegateFunction = form.Get("AgreegateFunction"); }
-                //if (form.Get("CountriesList") == null) { CountriesList = "none"; } else { CountriesList = form.Get("CountriesList"); }
+            {                
                 var submittedDataString = "/TypeOfChart/" + form.Get("TypeOfChart") + "/CountriesList/" + DisabledDropdownValueHandler.GetDisabledDropdownValue(form.Get("CountriesList")) + "/columnIndexes/" + form.Get("columnIndexes")
                     + "/AgreegateFunction/" + DisabledDropdownValueHandler.GetDisabledDropdownValue(form.Get("AgreegateFunction"))
-                    + "/ChooseYear/" + form.Get("ChooseYear")
-                    + "/ChoosingGroups/" + form.Get("ChoosingGroups")
-                    + "/YearAggregation/" + form.Get("YearAggregation");
+                    + "/ChooseYear/" + DisabledDropdownValueHandler.GetDisabledDropdownValue(form.Get("ChooseYear"))
+                    + "/ChoosingGroups/" + DisabledDropdownValueHandler.GetDisabledDropdownValue(form.Get("ChoosingGroups"))
+                    + "/YearAggregation/" + DisabledDropdownValueHandler.GetDisabledDropdownValue(form.Get("YearAggregation"));
                 System.Diagnostics.Debug.WriteLine(submittedDataString);
-                //var indexesByCountry = MainHelper.GetIndexesByCountry(submittedDataString);
-                ViewBag.chartType = form.Get("TypeOfChart");
                 
                 var chartDetails = MainHelper.GetChartDetails(submittedDataString);
-                ViewBag.DataPoints = chartDetails;
-                string dataPointsJson = JsonConvert.SerializeObject(chartDetails);
+                
+                string dataPointsJson = JsonConvert.SerializeObject(chartDetails); //MainHelper.GetChartData(submittedDataString);//JsonConvert.SerializeObject(chartDetails);
                 ViewBag.DataPointsJson = dataPointsJson;
+                ViewBag.chartType = form.Get("TypeOfChart");
+                ViewBag.chartTitle = "Chart of " + form.Get("columnIndexes");                
                 return View();
             }
             catch (Exception ex)

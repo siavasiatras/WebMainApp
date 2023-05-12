@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace WebAppDBHandler.Helpers
 {
-    public class DataPointIntegerX
+    public class Years
     {
-        public int x { get; set; }
-        public double y { get; set; }
-        public string label { get; set; }
+        public string yearDiff { get; set; }
     }
 }

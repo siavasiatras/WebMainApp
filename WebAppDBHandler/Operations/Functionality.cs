@@ -7,10 +7,13 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
 
+
 namespace WebAppDBHandler.Operations
 {
     public class Functionality
     {
+        private static object chartData;
+
         public static List<COUNTRy> GetCountries()
         {
             try
@@ -27,7 +30,7 @@ namespace WebAppDBHandler.Operations
             }
         }
 
-        
+
         public static List<ColumnsToChartIndex> GetColumns()
         {
             SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DWHContext"].ToString());
@@ -52,7 +55,7 @@ namespace WebAppDBHandler.Operations
             return (columnList);
         }
 
-        public static List<DataPointIntegerX> GetChartDetails(String submittedDataString)
+        public static List<ChartData> GetChartDetails(String submittedDataString)
         {
             try
             {
@@ -66,19 +69,34 @@ namespace WebAppDBHandler.Operations
                 DataTable dataTable = new DataTable();
                 adapter.Fill(dataTable);
 
-                List<DataPointIntegerX> dataList = new List<DataPointIntegerX>();
-
+                
+                List<ChartData> chartDataList = new List<ChartData>();
                 foreach (DataRow row in dataTable.Rows)
                 {
-                    DataPointIntegerX chartDetails = new DataPointIntegerX();
-                    chartDetails.x = Convert.ToInt32(row[0]);
-                    chartDetails.y = Convert.ToDouble(row[1]);
-                    chartDetails.label = Convert.ToString(row[2]);
-                    dataList.Add(chartDetails);
+
+                    
+                    DataPointWithX dataPoint = new DataPointWithX();
+                    string type = row[0].ToString();
+                    string name = Convert.ToString(row[1]);
+                    dataPoint.x = Convert.ToInt32(row[2]);
+                    dataPoint.y = Convert.ToDecimal(row[3]);
+                    
+                    ChartData chartData = chartDataList.Find(c => c.type == type && c.name == name);
+
+                    if (chartData == null)
+                    {
+                        chartData = new ChartData { type = type, name = name, dataPoints = new List<DataPointWithX>() };
+                        chartDataList.Add(chartData);
+                    }
+
+
+                    chartData.dataPoints.Add(dataPoint);                
                 }
+                
+
                 con.Close();
 
-                return dataList;
+                return chartDataList;
             }
             catch (Exception ex)
             {
@@ -86,40 +104,46 @@ namespace WebAppDBHandler.Operations
                 throw ex;
             }
             
-        }
+        }                
 
-        public static List<DataPointStringX> GetChartDetailsString(String submittedDataString)
+        public static string GetChartData(String submittedDataString)
         {
-            if (submittedDataString == null) { submittedDataString = ""; }
-            SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DWHContext"].ToString());
-            SqlCommand cmd = new SqlCommand("DWH.rpt.ProduceResults", con);
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-            cmd.Parameters.Add(new SqlParameter("@string", SqlDbType.VarChar, 1000) { Value = submittedDataString });
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            adapter.SelectCommand = cmd;
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-
-            List<DataPointStringX> dataList = new List<DataPointStringX>();
-
-            foreach (DataRow row in dataTable.Rows)
+            try
             {
-                DataPointStringX chartDetails = new DataPointStringX();
-                chartDetails.x = Convert.ToString(row[0]);
-                chartDetails.y = Convert.ToDouble(row[1]);
-                //chartDetails.lablel = Convert.ToString(row[2]);
-                dataList.Add(chartDetails);
+                if (submittedDataString == null) { submittedDataString = ""; }
+                SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DWHContext"].ToString());
+                con.Open();
+                SqlCommand cmd = new SqlCommand("DWH.rpt.ProduceResults", con);
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.Add(new SqlParameter("@string", SqlDbType.VarChar, 1000) { Value = submittedDataString });
+                
+                string result = "";
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        result = reader.GetString(0);
+                    }
+                }
+                con.Close();
+
+                return result;
             }
-            con.Close();
-            return dataList;
+            catch (Exception ex)
+            {
+                ErrorHandler.WriteErrorInDB(ex);
+                throw ex;
+            }
+
         }
+        
 
         public static List<Years> GetYears()
         {
             try
             {
                 SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["DWHContext"].ToString());
-                SqlCommand cmd = new SqlCommand("with cte as( select distinct a.FROP_YEAR from [dbo].[FERTILITY_RATES_ON_PERIOD]  a ) select FROP_YEAR as [year] from cte order by FROP_YEAR", con);
+                SqlCommand cmd = new SqlCommand(";WITH AgeDiff AS (\r\nselect distinct convert(varchar(3),PMOP_STARTING_AGE)  +'-'+ convert(varchar(3),PMOP_ENDING_AGE) as AGE_DIFF from POPULATION_MIDYAER_ON_PERIOD where PMOP_COUNTRY_ID =1 \r\n)\r\nselect  a.AGE_DIFF from AgeDiff a\r\norder by convert(int,substring(AGE_DIFF ,1,charindex('-',AGE_DIFF)-1))", con);
                 cmd.CommandType = System.Data.CommandType.Text;
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 adapter.SelectCommand = cmd;
@@ -131,7 +155,7 @@ namespace WebAppDBHandler.Operations
                 foreach (DataRow row in dataList.Rows)
                 {
                     Years chartDetails = new Years();
-                    chartDetails.year = Convert.ToInt32(row[0]);
+                    chartDetails.yearDiff = Convert.ToString(row[0]);
 
                     columnList.Add(chartDetails);
                 }

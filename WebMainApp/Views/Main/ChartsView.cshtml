@@ -1,102 +1,116 @@
 ﻿@{
     ViewData["Title"] = "Diagram";
     var canvasjsType = ViewBag.chartType;
+    var chartTitle = ViewBag.chartTitle;
 }
 
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js">
+    <script src="~/Scripts/typings/canvasjs/canvasjs.min.js">
+    </script>
+    <script>
+        function validateChartData(chartData) {
+            // Check if chartData is an array
+            if (!Array.isArray(chartData)) {
+                console.error("Invalid chart data: chartData is not an array.");
+                return false;
+            }
+
+            // Check if each chart data item has required properties
+            for (var i = 0; i < chartData.length; i++) {
+                var item = chartData[i];
+                if (!item.hasOwnProperty("type") || !item.hasOwnProperty("name") || !item.hasOwnProperty("dataPoints")) {
+                    console.error("Invalid chart data item: missing required properties.");
+                    return false;
+                }
+                // Check if dataPoints is an array
+                if (!Array.isArray(item.dataPoints)) {
+                    console.error("Invalid chart data item: dataPoints is not an array.");
+                    return false;
+                }
+                // Check if each data point has required properties
+                for (var j = 0; j < item.dataPoints.length; j++) {
+                    var dataPoint = item.dataPoints[j];
+                    if (!dataPoint.hasOwnProperty("x") || !dataPoint.hasOwnProperty("y")) {
+                        console.error("Invalid data point: missing required properties.");
+                        return false;
+                    }
+                }
+            }
+            console.log("Correct ChartData!")
+            // Chart data is valid
+            return true;
+        }
     </script>
 
     <script type="text/javascript">
         window.onload = function () {
-            var bagData = JSON.parse('@Html.Raw(ViewBag.DataPointsJson)');
+            var bagData =  JSON.parse('@Html.Raw(ViewBag.DataPointsJson)');
+            console.log(bagData);
             // Create array of data points
-            var chartDataPoints = [];
-            for (var i = 0; i < bagData.length; i++) {
-                switch ("@canvasjsType") {
-                    case "column":
-                        chartDataPoints.push({
-                            label: bagData[i].label,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "bar":
-                        chartDataPoints.push({
-                            label: bagData[i].label,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "pie":
-                        chartDataPoints.push({
-                            label: bagData[i].label,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "line":
-                        chartDataPoints.push({
-                            x: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                    case "bubble":
-                        chartDataPoints.push({
-                            x: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "spline":
-                        chartDataPoints.push({
-                            label: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "splineArea":
-                        chartDataPoints.push({
-                            label: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "stepLine":
-                        chartDataPoints.push({
-                            x: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                        break;
-                    case "stepArea":
-                        chartDataPoints.push({
-                            label: bagData[i].x,
-                            y: bagData[i].y
-                        });
-                        break;                   
-                }
-            }
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                backgroundColor: "#8AB6D6",
-                theme: "theme2",
-                animationEnabled: true,
-                title: {
-                    text: "A Chart With "
-                },
-                subtitles: [
-                    { text: "Resize the Browser" }
-                ],
-                data: [
+            var chartData = [];
+            var dataPointsList = [];
+            for (var i = 0; i < bagData.length; i++)
+            {                
+                dataPointsList = bagData[i].dataPoints;
+                chartData.push(
                     {
-                        // change type to bar, line, area, pie, etc.
-                        type: "@canvasjsType",//"line",
-                        dataPoints: chartDataPoints
-                        }
-                ]
+                        
+                         type: bagData[0].type,
+                        name: bagData[i].name,
+                        axisYType: "secondary",
+                        showInLegend: true,
+                        markerSize: 0,
+                        yValueFormatString: "$#,###k",
+                        dataPoints: dataPointsList
+
+                    });               
+            }          
+
+            console.log(bagData);
+            var chart = new CanvasJS.Chart("chartContainer", {                
+                backgroundColor: "#8AB6D6",                               
+                theme: "theme2",
+                zoomEnabled: true,
+                animationEnabled: true,
+                
+                title: {
+                    text: "@chartTitle",
+                    fontSize: 20
+                },
+                axisY: {
+                    includeZero: false,
+
+                },
+                toolTip: {
+                    shared: true
+                },
+                legend: {
+                    cursor: "pointer",
+                    dockInsidePlotArea: false,
+                    verticalAlign: "bottom",
+                    horizontalAlign: "center",
+                    fontSize: 10
+                },
+                data:
+                    bagData
             });
-            chart.render();
+            validateChartData(chartData);
+            chart.render();            
+            if (chart.canvas && chart.canvas.width > 0 && chart.canvas.height > 0) {
+                console.log("Chart rendered successfully!");
+            } else {
+                console.log("Error rendering chart!");
+            }           
         };
     </script>
+
+
 </head>
 <body>
-    <div id="chartContainer">
-    </div>
+    <div id="chartContainer" style="height:600px; width:100%">        
+    </div>   
 
 </body>
 </html>

@@ -72,11 +72,10 @@
     <Compile Include="DatabaseContext\POPULATION_MIDYAER_ON_PERIOD.cs" />
     <Compile Include="DatabaseContext\POPULATION_MIDYEAR_ON_PERIOD_FEMALE.cs" />
     <Compile Include="DatabaseContext\POPULATION_MIDYEAR_ON_PERIOD_MALE.cs" />
-    <Compile Include="Helpers\ChartDetails.cs" />
-    <Compile Include="Helpers\ColumnsToChartIndex.cs" />
-    <Compile Include="Helpers\DataPointIntegerX.cs" />
-    <Compile Include="Helpers\DataPointStringX.cs" />
-    <Compile Include="Helpers\Years.cs" />
+    <Compile Include="ChartModels\ChartData.cs" />
+    <Compile Include="ChartModels\ColumnsToChartIndex.cs" />
+    <Compile Include="ChartModels\DataPointWithX.cs" />
+    <Compile Include="ChartModels\Years.cs" />
     <Compile Include="Operations\ErrorHandler.cs" />
     <Compile Include="Operations\Functionality.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

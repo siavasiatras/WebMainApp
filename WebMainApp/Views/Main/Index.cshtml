@@ -13,16 +13,27 @@
 <script type="text/javascript">
     $(document).ready(function () {
         var ChooseYearDropdown = document.getElementById("ChooseYear");
+        var columnIndexesDropdown = document.getElementById("columnIndexes");
         var AgreegateFunctionDropdown = document.getElementById("AgreegateFunction");
         var ChoosingGroupsDropdown = document.getElementById("ChoosingGroups");
         var CountriesListDropdown = document.getElementById("CountriesList");
+        var TypeChartListDropdown = document.getElementById("TypeOfChart");
 
-        ChooseYearDropdown.addEventListener("change", function () {
-            if (ChooseYearDropdown.value === "none") {
-                AgreegateFunctionDropdown.value = "none";
-                AgreegateFunctionDropdown.disabled = false;
+        columnIndexesDropdown.addEventListener("change", function () {
+            if (columnIndexesDropdown.value === "FROP_AGE_GROUP_INDICATOR" ||
+                columnIndexesDropdown.value === "FROP_FERTILITY_RATE" ||
+                columnIndexesDropdown.value === "PF_POPULATION_FEMALE" ||
+                columnIndexesDropdown.value === "PM_POPULATION_MALE" ||
+                columnIndexesDropdown.value === "PMOP_AGE_GROUP_INDICATOR" ||
+                columnIndexesDropdown.value === "PMOP_MIDYEAR_POPULATION" ||
+                columnIndexesDropdown.value === "PMOPF_AGE_GROUP_INDICATOR" ||
+                columnIndexesDropdown.value === "PMOPF_MIDYEAR_POPULATION_FEMALE" ||
+                columnIndexesDropdown.value === "PMOPM_AGE_GROUP_INDICATOR" ||
+                columnIndexesDropdown.value === "PMOPM_MIDYEAR_POPULATION_MALE") {
+                
+                ChooseYearDropdown.disabled = false;
             } else {
-                AgreegateFunctionDropdown.disabled = true;
+                ChooseYearDropdown.disabled = true;
             }
         });
 
@@ -33,7 +44,8 @@
             } else {
                 CountriesListDropdown.disabled = true;
             }
-        });
+        });        
+      
     });
 </script>
 
@@ -45,20 +57,19 @@
             <div class="">
                 <select class="webApp-select mb-4" id="TypeOfChart" name="TypeOfChart" required>
                     <option value="none" selected>Choose Chart</option>
-                    <option value="column">Column Chart</option>
+                    @*<option value="column">Column Chart</option>*@
                     <option value="bar">Bar Chart</option>
-                    <option value="pie">Pie Chart</option>
+                    @*<option value="pie">Pie Chart</option>*@
                     <option value="line">Line Chart</option>
                     <option value="scatter">Scatter Chart</option>
-                    <option value="bubble">Bubble Chart</option>
-                    <option value="spline">Spline Chart</option>
-                    <option value="splineArea">Spline Area Chart</option>
-                    <option value="stepLine">Step Line Chart</option>
-                    <option value="stepArea">Step Area Chart</option>
-
-
+                    @*<option value="bubble">Bubble Chart</option>
+            <option value="spline">Spline Chart</option>
+            <option value="splineArea">Spline Area Chart</option>
+            <option value="stepLine">Step Line Chart</option>
+            <option value="stepArea">Step Area Chart</option>*@
                 </select>
             </div>
+            <span id="dropdown-text">If You Selected Scatter Choose two Indices</span>
             <div class="">
                 <select multiple="multiple" class="webApp-select mb-4" id="columnIndexes" name="columnIndexes" required>
                     <option value="none" selected>Choose Data Type</option>
@@ -69,7 +80,9 @@
                             <option value="@option.databaseColumnName" data-content="@option.databaseColumnName">@option.columnName</option>
                         }
                     }
+
                 </select>
+
             </div>
             <div class="">
                 <select multiple="multiple" class="webApp-select mb-4" id="CountriesList" name="CountriesList">
@@ -92,17 +105,17 @@
                 </select>
             </div>
             <div class="">
-                <select class="webApp-select mb-4" id="ChooseYear" name="ChooseYear">
-                    <option value="none" selected>Choose Year</option>
-                    @if (ViewBag.yearsList != null)
+            <select class="webApp-select mb-4" id="ChooseYear" name="ChooseYear" >
+                <option value="none" selected>Choose Year</option>
+                @if (ViewBag.yearsList != null)
+                {
+                    foreach (var option in ViewBag.yearsList)
                     {
-                        foreach (var option in ViewBag.yearsList)
-                        {
-                            <option value="@option.year" data-content="@option.year">@option.year</option>
-                        }
+                        <option value="@option.yearDiff" data-content="@option.yearDiff">@option.yearDiff</option>
                     }
-                </select>
-            </div>
+                }
+            </select>
+        </div>
 
             <div class="">
                 <select class="webApp-select mb-4" id="ChoosingGroups" name="ChoosingGroups">
@@ -174,9 +187,9 @@
 
 
     }
-    <div>
+    @*<div>
         @{Html.Partial("ChartsView", "Main");}
-    </div>
+    </div>*@
 
 </body>
 

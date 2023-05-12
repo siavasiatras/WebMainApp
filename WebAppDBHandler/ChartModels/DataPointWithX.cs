@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace WebAppDBHandler.Helpers
 {
-    public class Years
+    public class DataPointWithX
     {
-        public int year { get; set; }
+        public int x { get; set; }
+        public decimal y { get; set; }
     }
 }

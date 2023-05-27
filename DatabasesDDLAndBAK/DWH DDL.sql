@@ -111,6 +111,8 @@ CREATE view [dbo].[ELEMENTS_TO_CHART] AS (
 	and TABLE_NAME not like 'countries' 
 	and TABLE_NAME not like 'CountriesList'
 	and TABLE_NAME not like 'INDEXES_BY_REGION'
+	and TABLE_NAME not like 'POPULATION_FEMALE'
+	and TABLE_NAME not like 'POPULATION_MALE'
 
 )
 GO
